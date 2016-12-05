@@ -1,0 +1,19 @@
+.login {
+    max-width: 400px;
+}
+
+.btn-google {
+    background-color: white;
+    color: #757575;
+    box-shadow: 0 2px 4px 0 rgba(0, 0, 0, .25);
+    max-height: 36px;
+}
+
+.gimage {
+    float: left;
+    margin-right: 5px;
+}
+
+.gtext {
+    float: right;
+}

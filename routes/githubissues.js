@@ -11,13 +11,13 @@ const queryString = require('query-string')
 
 /* GET github issues page. */
 router.get('/', function(req, res, next) {
-    if(!config.token){
+    if(!config.google_token){
         const error = new Error('Unauthorized')
         error.status = 401
         return next(error)
     }
 
-    if(!config.github){
+    if(!config.github_token){
         res.redirect('/login/github')
     } else {
         const url = 'https://api.github.com/user/repos'
@@ -35,13 +35,12 @@ router.get('/', function(req, res, next) {
 });
 
 router.post('/', function (req, res, next) {
-    const host = 'https://api.github.com'
-    const path = '/search/repositories'
-    const params = {
+    const url = 'https://api.github.com/search/repositories'
+    const params = queryString.stringify({
         q:req.body.repo_search,
-    }
+    })
 
-    console.log(host+path+'?'+queryString.stringify(params))
+    console.log(url + '?' + params)
 
 })
 

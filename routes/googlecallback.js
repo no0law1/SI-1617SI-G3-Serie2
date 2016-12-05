@@ -1,9 +1,11 @@
 "use strict"
 
 const config = require('../config')
-const request = require('request')
+
 const express = require('express')
 const router = express.Router()
+
+const request = require('request')
 
 /**
  *
@@ -19,9 +21,8 @@ function getAccessToken(code, cb){
         //redirect_uri: config.API_URL + 'home',
         grant_type: 'authorization_code'
     }
-    const url = 'https://www.googleapis.com/oauth2/v4/token'
 
-    request.post(url, {
+    request.post(config.GOOGLE_OAUTH2_TOKEN_URL, {
         json:true,
         form:params
     }, cb)
@@ -36,12 +37,14 @@ router.get('/', function(req, res, next) {
 
     if(req.query.code){
         //Ask for access token(save access token or request always?)
-        getAccessToken(decodeURIComponent(req.query.code), (error, resp, token) => {
+        getAccessToken(req.query.code, (error, resp, token) => {
             if(error){
                 return next(error)
             }
-            config.token = token
+            config.google_token = token
             res.redirect(config.API_URL+'home')
+            //Store access token
+            //Ask for profile
         })
     } else {
         next(new Error('Access Denied'))

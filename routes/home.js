@@ -7,7 +7,7 @@ var router = express.Router();
 
 /* GET home page. */
 router.get('/', function(req, res, next) {
-    if(!config.token){
+    if(!config.google_token){
         const error = new Error('Unauthorized')
         error.status = 401
         return next(error)

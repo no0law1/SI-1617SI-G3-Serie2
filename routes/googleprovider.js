@@ -1,9 +1,11 @@
 "use strict"
 
 const config = require('../config')
-const queryString = require('query-string')
+
 const express = require('express')
 const router = express.Router()
+
+const queryString = require('query-string')
 
 /**
  * To mitigate against cross-site request forgery

@@ -7,8 +7,13 @@ const router = express.Router()
 
 const queryString = require('query-string')
 
+/**
+ * To mitigate against cross-site request forgery
+ */
+const state = ''    //TODO
+
 /* GET github login page. */
-router.get('/', function(req, res, next) {
+router.get('/', function (req, res, next) {
     res.status(302)
 
     const params = queryString.stringify({
@@ -18,7 +23,7 @@ router.get('/', function(req, res, next) {
     })
 
     res.set({
-        "Location": config.GITHUB_OAUTH2_URL+'?'+params
+        "Location": config.GITHUB_OAUTH2_URL + '?' + params
     })
     res.end()
 })

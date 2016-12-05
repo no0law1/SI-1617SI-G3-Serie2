@@ -19,4 +19,6 @@ module.exports =
     GITHUB_REDIRECT_URI: 'http://localhost:8080/login/github/callback',
     GITHUB_CLIENT_ID: '762c2a6bfcbc27cff09c',
     GITHUB_CLIENT_SECRET: 'a530b7a1e35ff51c720431bd2845c1cfbd2a13ce',
+    // The base endpoint for token retrieval.
+    GITHUB_OAUTH2_TOKEN_URL: 'https://github.com/login/oauth/access_token',
 }

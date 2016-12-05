@@ -21,17 +21,21 @@ router.get('/', function(req, res, next) {
     //if(!config.github_token){
         res.redirect('/login/github')
     } else {
-        const url = 'https://api.github.com/user/repos'
-        request.get(url, function (error, response, body){
+        const options = {
+            url: 'https://api.github.com/user/repos',
+            headers: {
+                'User-Agent': 'node.js',
+                'Authorization': 'token ' + req.cookies.github_token,
+            }
+        }
+        request.get(options, function (error, response, body){
             if(error){
                 return next(error)
             }
-            const items = {}
+            //TODO: Parse body to an array of items, in which an item is a Repository
+            const items = []
             res.render('githubissues', items)
         })
-        //TODO
-        // Request Issues of a specified Github Project
-        // Need authentication to github
     }
 });
 

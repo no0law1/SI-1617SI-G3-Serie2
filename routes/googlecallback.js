@@ -42,8 +42,6 @@ router.get('/', function(req, res, next) {
             }
             config.token = token
             res.redirect(config.API_URL+'home')
-            //Store access token
-            //Ask for profile
         })
     } else {
         next(new Error('Access Denied'))

@@ -5,18 +5,20 @@ const config = require('../config')
 const express = require('express')
 const router = express.Router()
 
-function queryString() {
-    return config.GITHUB_CLIENT_ID + '&' +
-        config.GITHUB_REDIRECT_URI + '&' +
-        config.GITHUB_SCOPE
-}
+const queryString = require('query-string')
 
 /* GET github login page. */
 router.get('/', function(req, res, next) {
     res.status(302)
 
+    const params = queryString.stringify({
+        client_id: config.GITHUB_CLIENT_ID,
+        redirect_uri: config.GITHUB_REDIRECT_URI,
+        scope: 'user repo',
+    })
+
     res.set({
-        "Location": config.GITHUB_OAUTH2_URL+'?'+queryString()
+        "Location": config.GITHUB_OAUTH2_URL+'?'+params
     })
     res.end()
 })

@@ -7,17 +7,13 @@ var router = express.Router();
 
 /* GET home page. */
 router.get('/', function(req, res, next) {
-    if(config.token){
-        //Authenticated
-        res.render('home', {
-            username: JSON.stringify(config.token)
-        })
-    }
-    else {
+    if(!config.token){
         const error = new Error('Unauthorized')
         error.status = 401
-        next(error)
+        return next(error)
     }
+    //Authenticated
+    res.render('home')
 });
 
 module.exports = router;

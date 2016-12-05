@@ -41,7 +41,11 @@ router.get('/', function(req, res, next) {
             if(error){
                 return next(error)
             }
-            config.google_token = token
+            res.cookie('google_token', token.access_token, {
+                httpOnly:true,
+                //Session cookie? maxAge very small
+                //maxAge:token.expires_in,
+            })
             res.redirect(config.API_URL+'home')
             //Store access token
             //Ask for profile

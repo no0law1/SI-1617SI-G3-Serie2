@@ -11,13 +11,14 @@ const queryString = require('query-string')
 
 /* GET github issues page. */
 router.get('/', function(req, res, next) {
-    if(!config.google_token){
+    if(!req.cookies.google_token){
         const error = new Error('Unauthorized')
         error.status = 401
         return next(error)
     }
 
-    if(!config.github_token){
+    if(!req.cookies.github_token){
+    //if(!config.github_token){
         res.redirect('/login/github')
     } else {
         const url = 'https://api.github.com/user/repos'

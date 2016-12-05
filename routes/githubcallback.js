@@ -32,7 +32,10 @@ router.get('/', function(req, res, next) {
         if(error){
             return next(error)
         }
-        config.github_token = token
+
+        res.cookie('github_token', token.access_token, {
+            httpOnly:true,
+        })
         res.redirect(config.API_URL+'githubissues')
     })
 })

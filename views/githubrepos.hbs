@@ -19,13 +19,21 @@
             <table class="table table-bordered">
                 <thead>
                 <tr>
-                    <th>Repo</th>
+                    <th>Repo Name</th>
+                    <th>Owner</th>
+                    <th>Issues</th>
                 </tr>
                 </thead>
                 <tbody>
                 {{#each items}}
                     <tr>
-                        <th>{{items.name}}</th>
+                        <th>{{name}}</th>
+                        <th>{{owner}}</th>
+                        <th>
+                            <div class="btn" align="center">
+                                <a href={{issues_url}}>See Issues</a>
+                            </div>
+                        </th>
                     </tr>
                 {{/each}}
                 </tbody>

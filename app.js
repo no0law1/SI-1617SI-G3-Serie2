@@ -10,6 +10,7 @@ const bodyParser = require('body-parser')
 const index = require('./routes/index')
 const home = require('./routes/home')
 const githubIssues = require('./routes/githubissues')
+const githubRepos = require('./routes/githubrepos')
 const login = require('./routes/login')
 const googleProvider = require('./routes/googleprovider')
 const googleCallback = require('./routes/googlecallback')
@@ -32,7 +33,9 @@ server.use(express.static(path.join(__dirname, 'public')))
 
 server.use('/', index)
 server.use('/home', home)
-server.use('/githubissues', githubIssues)
+server.use('/github/repos', githubRepos)
+// :repo is repo name
+server.use('/', githubIssues)
 
 /**
  * Basic Initial Authentication

@@ -3,8 +3,11 @@ const router = express.Router()
 
 /* GET index page. */
 router.get('/', function(req, res, next) {
-  //TODO: home view
-  res.render('index', { title: 'Express' })
+  if(req.cookies.google_token){
+    res.redirect('/home')
+  } else {
+    res.redirect('/login')
+  }
 })
 
 module.exports = router

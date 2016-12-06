@@ -7,7 +7,7 @@ const router = express.Router()
 
 const request = require('request')
 
-const queryString = require('query-string')
+const dtoMapper = require('../model/DTOMapper')
 
 /* GET issues of a github repo page. */
 router.get('/github/:repo/issues', function(req, res, next) {
@@ -17,7 +17,8 @@ router.get('/github/:repo/issues', function(req, res, next) {
         if(error){
             return next(error)
         }
-        console.log(JSON.parse(body))
+        const items = dtoMapper.issues(JSON.parse(body))
+        res.render('githubissues', {name: name, issues: items})
     })
 })
 

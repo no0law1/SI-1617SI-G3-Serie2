@@ -1,29 +1,25 @@
 <div class="container">
     <div align="center">
-        <h2>Your Repos</h2>
+        <!--Name of the repository-->
+        <h1>{{name}}</h1>
         <div>
             <table class="table table-bordered">
                 <thead>
                 <tr>
-                    <th>Repo Name</th>
+                    <th>Issue</th>
                     <th>Owner</th>
-                    <th>Issues</th>
                 </tr>
                 </thead>
                 <tbody>
-                {{#each items}}
+                {{#each issues}}
                     <tr>
                         <th>{{name}}</th>
                         <th>{{owner}}</th>
-                        <th>
-                            <div class="btn" align="center">
-                                <a href={{issues_url}}>See Issues</a>
-                            </div>
-                        </th>
                     </tr>
                 {{/each}}
                 </tbody>
             </table>
+            <div><h1>Insert this to Google Tasks</h1></div>
         </div>
     </div>
 </div>

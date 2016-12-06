@@ -1,7 +1,7 @@
 "use strict"
 
 const config = require('../config')
-const repoMapper = require('../model/RepoDTOMapper')
+const dtoMapper = require('../model/DTOMapper')
 
 const express = require('express')
 const router = express.Router()
@@ -34,7 +34,7 @@ router.get('/', function(req, res, next) {
                 return next(error)
             }
 
-            const items = repoMapper(JSON.parse(body))
+            const items = dtoMapper.repos(JSON.parse(body))
             res.render('githubrepos', {items: items})
         })
     }

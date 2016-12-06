@@ -44,7 +44,7 @@ router.get('/', function(req, res, next) {
         res.cookie('github_token', token.access_token, {
             httpOnly:true,
         })
-        res.redirect(config.API_URL+'githubissues')
+        res.redirect(config.API_URL+'github/repos')
     })
 })
 

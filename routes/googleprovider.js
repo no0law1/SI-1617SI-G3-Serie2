@@ -12,7 +12,9 @@ const queryString = require('query-string')
  */
 const state = ''    //TODO
 
-/* GET google login page. */
+/**
+ * GET google login page.
+ */
 router.get('/', function(req, res, next) {
     res.status(302)
 

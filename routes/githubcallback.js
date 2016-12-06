@@ -7,6 +7,12 @@ const router = express.Router()
 
 const request = require('request')
 
+/**
+ * Gets access token from github by sending the code to it
+ *
+ * @param code code to be sent
+ * @param cb function(error, response, body) used for request
+ */
 function getAccessToken(code, cb){
     const params = {
         code: code,
@@ -22,7 +28,9 @@ function getAccessToken(code, cb){
     }, cb)
 }
 
-/* GET github callback authentication page. */
+/**
+ * GET github callback authentication page.
+ */
 router.get('/', function(req, res, next) {
     if(req.query.error){
         return next(new Error(req.query.error))

@@ -34,7 +34,6 @@ server.use(express.static(path.join(__dirname, 'public')))
 server.use('/', index)
 server.use('/home', home)
 server.use('/github/repos', githubRepos)
-// :repo is repo name
 server.use('/', githubIssues)
 
 /**

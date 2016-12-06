@@ -8,9 +8,9 @@ const router = express.Router()
 
 const request = require('request')
 
-const queryString = require('query-string')
-
-/* GET github repos page. */
+/**
+ * GET github repos page.
+ */
 router.get('/', function(req, res, next) {
     if(!req.cookies.google_token){
         const error = new Error('Unauthorized')
@@ -19,7 +19,6 @@ router.get('/', function(req, res, next) {
     }
 
     if(!req.cookies.github_token){
-    //if(!config.github_token){
         res.redirect('/login/github')
     } else {
         const options = {
@@ -40,14 +39,20 @@ router.get('/', function(req, res, next) {
     }
 });
 
-router.post('/', function (req, res, next) {
-    const url = 'https://api.github.com/search/repositories'
-    const params = queryString.stringify({
-        q:req.body.repo_search,
-    })
 
-    console.log(url + '?' + params)
+//const queryString = require('query-string')
 
-})
+// /**
+//  * Handles search of a repository. Not Implemented in view
+//  */
+// router.post('/', function (req, res, next) {
+//     const url = 'https://api.github.com/search/repositories'
+//     const params = queryString.stringify({
+//         q:req.body.repo_search,
+//     })
+//
+//     console.log(url + '?' + params)
+//
+// })
 
 module.exports = router;

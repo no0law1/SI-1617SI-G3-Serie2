@@ -8,6 +8,7 @@ const router = express.Router()
 const request = require('request')
 
 /**
+ * Gets access token from google by sending the code to it
  *
  * @param code uri decoded google auth code
  * @param cb {function(err, response, token)}
@@ -29,7 +30,9 @@ function getAccessToken(code, cb){
 
 }
 
-/* GET google callback authentication page. */
+/**
+ * GET google callback authentication page.
+ */
 router.get('/', function(req, res, next) {
     if(req.query.error) {
         return next(new Error(req.query.error))
@@ -47,8 +50,6 @@ router.get('/', function(req, res, next) {
                 //maxAge:token.expires_in,
             })
             res.redirect(config.API_URL+'home')
-            //Store access token
-            //Ask for profile
         })
     } else {
         next(new Error('Access Denied'))

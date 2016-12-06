@@ -3,7 +3,7 @@
 module.exports = {
 
     /**
-     * Maps a repository DTO to a Entity model Repository, which only has what is needed
+     * Maps a repository DTO to an Entity model Repository, which only has what is needed
      * @param repos
      * @return {Array} of literals  //TODO: Instanceof REPOS
      */
@@ -21,7 +21,7 @@ module.exports = {
     },
 
     /**
-     * Maps an issue DTO to a Entity model Issue, which only has what is needed
+     * Maps an issue DTO to an Entity model Issue, which only has what is needed
      * @param issues
      * @return {Array}
      */

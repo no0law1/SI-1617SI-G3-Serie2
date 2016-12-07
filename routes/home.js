@@ -14,7 +14,6 @@ router.get('/', function(req, res, next) {
     if(!id){
         res.redirect('/login')
     }
-    //Authenticated
     res.render('home')
 });
 

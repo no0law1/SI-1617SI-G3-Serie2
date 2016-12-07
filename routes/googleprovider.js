@@ -22,7 +22,7 @@ router.get('/', function(req, res, next) {
     var query = queryString.stringify({
         redirect_uri: config.GOOGLE_REDIRECT_URI,
         client_id: config.GOOGLE_CLIENT_ID,
-        scope: "profile email",
+        scope: "profile email https://www.googleapis.com/auth/tasks",
         response_type: "code"
     })
 

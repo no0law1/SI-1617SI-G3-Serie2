@@ -2,6 +2,7 @@
 
 const config = require('../config')
 const dtoMapper = require('../model/DTOMapper')
+const accessTokenDB = require('../model/AccessTokenDB')
 
 const express = require('express')
 const router = express.Router()
@@ -12,31 +13,29 @@ const request = require('request')
  * GET github repos page.
  */
 router.get('/', function(req, res, next) {
-    if(!req.cookies.google_token){
-        const error = new Error('Unauthorized')
-        error.status = 401
-        return next(error)
+    const goog_token = accessTokenDB.getAccessToken(req.cookies.google_id)
+    if(!goog_token){
+        return res.redirect('/login')
     }
-
-    if(!req.cookies.github_token){
-        res.redirect('/login/github')
-    } else {
-        const options = {
-            url: 'https://api.github.com/user/repos',
-            headers: {
-                'User-Agent': 'node.js',
-                'Authorization': 'token ' + req.cookies.github_token,
-            }
+    const git_token = accessTokenDB.getAccessToken(req.cookies.github_id)
+    if(!git_token){
+        return res.redirect('/login/github')
+    }
+    const options = {
+        url: 'https://api.github.com/user/repos',
+        headers: {
+            'User-Agent': 'node.js',
+            'Authorization': 'token ' + git_token.access_token,
         }
-        request.get(options, function (error, response, body){
-            if(error){
-                return next(error)
-            }
-
-            const items = dtoMapper.repos(JSON.parse(body))
-            res.render('githubrepos', {items: items})
-        })
     }
+    request.get(options, function (error, response, body){
+        if(error){
+            return next(error)
+        }
+
+        const items = dtoMapper.repos(JSON.parse(body))
+        res.render('githubrepos', {items: items})
+    })
 });
 
 

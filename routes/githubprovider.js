@@ -10,7 +10,7 @@ const queryString = require('query-string')
 /**
  * To mitigate against cross-site request forgery
  */
-const state = ''    //TODO
+const state = 'ola_sou_github'    //TODO
 
 /**
  * GET github login page.
@@ -22,6 +22,7 @@ router.get('/', function (req, res, next) {
         client_id: config.GITHUB_CLIENT_ID,
         redirect_uri: config.GITHUB_REDIRECT_URI,
         scope: 'user repo',
+        state: state,
     })
 
     res.set({

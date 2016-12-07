@@ -1,6 +1,7 @@
 "use strict"
 
 const config = require('../config')
+const accessTokenDB = require('../model/AccessTokenDB')
 
 const express = require('express')
 const router = express.Router()
@@ -39,15 +40,15 @@ router.get('/', function(req, res, next) {
     }
 
     if(req.query.code){
-        //Ask for access token(save access token or request always?)
         getAccessToken(req.query.code, (error, resp, token) => {
             if(error){
                 return next(error)
             }
-            res.cookie('google_token', token.access_token, {
+            const id = accessTokenDB.putAccessToken(token)
+            res.cookie('google_id', id, {
                 httpOnly:true,
                 //Session cookie? maxAge very small
-                //maxAge:token.expires_in,
+                maxAge:token.expires_in*1000,   // expires_in (seconds) ... maxAge (miliseconds)
             })
             res.redirect(config.API_URL+'home')
         })

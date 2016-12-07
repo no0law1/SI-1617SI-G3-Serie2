@@ -2,6 +2,7 @@
 
 const config = require('../config')
 const dtoMapper = require('../model/DTOMapper')
+const accessTokenDB = require('../model/AccessTokenDB')
 
 const express = require('express')
 const router = express.Router()
@@ -34,9 +35,18 @@ function getIssues(name, owner, token, cb){
  * :repo is repo name
  */
 router.get('/github/:repo/issues', function(req, res, next) {
+    const goog_token = accessTokenDB.getAccessToken(req.cookies.google_id)
+    if(!goog_token){
+        return res.redirect('/login')
+    }
+    const git_token = accessTokenDB.getAccessToken(req.cookies.github_id)
+    if(!git_token){
+        return res.redirect('/login/github')
+    }
+
     const name = req.params.repo
     const owner = req.query.owner
-    getIssues(name, owner, req.cookies.github_token, (error, response, body) => {
+    getIssues(name, owner, git_token.access_token, (error, response, body) => {
         if(error){
             return next(error)
         }

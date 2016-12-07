@@ -47,7 +47,6 @@ router.get('/', function(req, res, next) {
         const id = accessTokenDB.putAccessToken(token)
         res.cookie('github_id', id, {
             httpOnly:true,
-            maxAge:token.expires_in*1000,   // expires_in (seconds) ... maxAge (miliseconds)
         })
         res.redirect(config.API_URL+'github/repos')
     })

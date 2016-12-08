@@ -113,11 +113,16 @@ router.post('/tasks', function(req, res, next) {
             return console.log(error.message)
         }
         const id = JSON.parse(body).id
+
         getIssues(req.body.title, req.body.owner, git_token.access_token, (error, response, body) => {
             if(error){
                 return next(error)
             }
+
             const items = dtoMapper.issues(JSON.parse(body))
+            if(items.length <= 0){
+                return res.end('Success')
+            }
 
             items.forEach((item) => {
                 let myBody = JSON.stringify({title: item.name})
@@ -138,6 +143,7 @@ router.post('/tasks', function(req, res, next) {
                         return next(error)
                     }
                     //TODO: success on view
+                    res.end('Success')
                 })
             })
         })

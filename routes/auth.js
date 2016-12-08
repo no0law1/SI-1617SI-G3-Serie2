@@ -12,7 +12,7 @@ const queryString = require('query-string')
 /**
  * To mitigate against cross-site request forgery
  */
-const state = 'ola_sou_github'    //TODO
+const state = 'ola_sou_cliente_servidor'    //TODO
 
 /**
  * GET login page
@@ -32,6 +32,7 @@ router.get('/google', function(req, res, next) {
         redirect_uri: config.GOOGLE_REDIRECT_URI,
         client_id: config.GOOGLE_CLIENT_ID,
         scope: "profile email https://www.googleapis.com/auth/tasks",
+        state: state,
         response_type: "code"
     });
 
@@ -47,6 +48,9 @@ router.get('/google', function(req, res, next) {
 router.get('/google/callback', function(req, res, next) {
     if(req.query.error) {
         return next(new Error(req.query.error))
+    }
+    if(!req.query.state || req.query.state != state){    //TODO: change this
+        return next(new Error())
     }
 
     if(req.query.code){
@@ -92,7 +96,7 @@ router.get('/github/callback', function(req, res, next) {
     if(req.query.error){
         return next(new Error(req.query.error))
     }
-    if(!req.query.state || req.query.state != 'ola_sou_github'){    //TODO: change this
+    if(!req.query.state || req.query.state != state){    //TODO: change this
         return next(new Error())
     }
 

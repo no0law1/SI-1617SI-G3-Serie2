@@ -8,13 +8,8 @@ const cookieParser = require('cookie-parser')
 const bodyParser = require('body-parser')
 
 const index = require('./routes/index')
-const home = require('./routes/home')
 const github = require('./routes/github')
-const login = require('./routes/login')
-const googleProvider = require('./routes/googleprovider')
-const googleCallback = require('./routes/googlecallback')
-const githubProvider = require('./routes/githubprovider')
-const githubCallback = require('./routes/githubcallback')
+const auth = require('./routes/auth')
 
 const server = express()
 
@@ -31,25 +26,8 @@ server.use(cookieParser())
 server.use(express.static(path.join(__dirname, 'public')))
 
 server.use('/', index)
-server.use('/home', home)
 server.use('/github', github)
-
-/**
- * Basic Initial Authentication
- */
-server.use('/login', login)
-
-/**
- * Github Authentication
- */
-server.use('/login/github/callback', githubCallback)
-server.use('/login/github', githubProvider)
-
-/**
- * Google Authentication
- */
-server.use('/login/google/callback', googleCallback)
-server.use('/login/google', googleProvider)
+server.use('/login', auth)
 
 // catch 404 and forward to error handler
 server.use(function(req, res, next) {

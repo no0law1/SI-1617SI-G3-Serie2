@@ -18,7 +18,7 @@ const request = require('request')
  * @param cb function(error, response, body)
  */
 function getIssues(name, owner, token, cb){
-    console.log('https://api.github.com/repos/' + owner + '/' + name + '/issues')
+    //console.log('https://api.github.com/repos/' + owner + '/' + name + '/issues')
     const options = {
         url: 'https://api.github.com/repos/' + owner + '/' + name + '/issues',
         headers: {

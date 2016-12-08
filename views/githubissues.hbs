@@ -19,9 +19,9 @@
                 {{/each}}
                 </tbody>
             </table>
-            <a href="#">
-                <div class="btn btn-google">Insert to Google Tasks</div>
-            </a>
+            <form action="/github/tasks" method="post">
+                <button class="btn btn-google" name="title" value={{name}}>Insert to Google Tasks</button>
+            </form>
         </div>
     </div>
 </div>

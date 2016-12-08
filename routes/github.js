@@ -80,7 +80,7 @@ router.get('/:repo/issues', function(req, res, next) {
             return next(error)
         }
         const items = dtoMapper.issues(JSON.parse(body))
-        res.render('githubissues', {name: name, issues: items})
+        res.render('githubissues', {name: name, owner: owner, issues: items})
     })
 })
 
@@ -88,23 +88,23 @@ router.get('/:repo/issues', function(req, res, next) {
  * POST issues to google tasks.
  */
 router.post('/tasks', function(req, res, next) {
-    const token = accessTokenDB.getAccessToken(req.cookies.google_id)
-    if(!token){
+    const google_token = accessTokenDB.getAccessToken(req.cookies.google_id)
+    if(!google_token){
         return res.redirect('/login')
     }
-
-    const body = {
-        "title": req.body.title,
+    const git_token = accessTokenDB.getAccessToken(req.cookies.github_id)
+    if(!git_token){
+        return res.redirect('/login/github')
     }
-
+    const body = JSON.stringify({title: req.body.title})
     const options = {
         url: 'https://www.googleapis.com/tasks/v1/users/@me/lists',
-        body: JSON.stringify(body),
+        body: body,
         headers: {
             'User-Agent': 'node.js',
-            'Authorization': 'Bearer ' + token.access_token,
+            'Authorization': 'Bearer ' + google_token.access_token,
             'Content-Type': 'application/json',
-            'Content-Length': JSON.stringify(body).length,
+            'Content-Length': body.length,
         },
     }
 
@@ -112,8 +112,35 @@ router.post('/tasks', function(req, res, next) {
         if(error){
             return console.log(error.message)
         }
-        console.log(body)
-        //TODO: post
+        const id = JSON.parse(body).id
+        getIssues(req.body.title, req.body.owner, git_token.access_token, (error, response, body) => {
+            if(error){
+                return next(error)
+            }
+            const items = dtoMapper.issues(JSON.parse(body))
+
+            items.forEach((item) => {
+                let myBody = JSON.stringify({title: item.name})
+
+                const options = {
+                    url: 'https://www.googleapis.com/tasks/v1/lists/'+id+'/tasks',
+                    body: myBody,
+                    headers: {
+                        'User-Agent': 'node.js',
+                        'Authorization': 'Bearer ' + google_token.access_token,
+                        'Content-Type': 'application/json',
+                        'Content-Length': myBody.length,
+                    },
+                }
+
+                request.post(options, (error, response, body) => {
+                    if(error){
+                        return next(error)
+                    }
+                    //TODO: success on view
+                })
+            })
+        })
     })
 })
 

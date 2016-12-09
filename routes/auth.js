@@ -12,6 +12,7 @@ const queryString = require('query-string')
 /**
  * To mitigate against cross-site request forgery
  */
+// generated hmac
 const state = 'ola_sou_cliente_servidor'    //TODO
 
 /**
@@ -62,7 +63,6 @@ router.get('/google/callback', function(req, res, next) {
             res.cookie('google_id', id, {
                 httpOnly:true,
                 maxAge:token.expires_in*1000,   // expires_in (seconds) ... maxAge (miliseconds)
-                signed: true,
             })
             res.redirect(config.API_URL+'home')
         })
@@ -109,7 +109,6 @@ router.get('/github/callback', function(req, res, next) {
         //Github is a session cookie
         res.cookie('github_id', id, {
             httpOnly:true,
-            signed: true,
         })
         res.redirect(config.API_URL+'github/repos')
     })

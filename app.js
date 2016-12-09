@@ -10,6 +10,7 @@ const bodyParser = require('body-parser')
 const index = require('./routes/index')
 const github = require('./routes/github')
 const auth = require('./routes/auth')
+const logout = require('./routes/logout')
 
 const server = express()
 
@@ -22,12 +23,13 @@ server.use(favicon(path.join(__dirname, 'public', 'favicon.ico')))
 server.use(logger('dev'))
 server.use(bodyParser.json())
 server.use(bodyParser.urlencoded({ extended: false }))
-server.use(cookieParser('secret'))  //TODO: secret
+server.use(cookieParser())
 server.use(express.static(path.join(__dirname, 'public')))
 
 server.use('/', index)
 server.use('/github', github)
 server.use('/login', auth)
+server.use('/logout', logout)
 
 // catch 404 and forward to error handler
 server.use(function(req, res, next) {

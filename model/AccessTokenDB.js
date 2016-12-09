@@ -13,7 +13,9 @@ function getRandomArbitrary(min = 0, max = N) {
 }
 
 function getNewID(){
-    return crypto.createHmac('sha256', key).update(String((counter++) + getRandomArbitrary())).digest(encoding)
+    return crypto.createHmac('sha256', key)
+        .update(String((counter++) + getRandomArbitrary()))
+        .digest(encoding)
 }
 
 module.exports = {
@@ -39,5 +41,9 @@ module.exports = {
         tokens[key] = value
         return key
     },
+
+    removeAccessToken: function (key) {
+        delete tokens[key]
+    }
 
 }

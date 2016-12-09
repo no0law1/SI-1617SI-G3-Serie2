@@ -22,7 +22,7 @@ server.use(favicon(path.join(__dirname, 'public', 'favicon.ico')))
 server.use(logger('dev'))
 server.use(bodyParser.json())
 server.use(bodyParser.urlencoded({ extended: false }))
-server.use(cookieParser())
+server.use(cookieParser('secret'))  //TODO: secret
 server.use(express.static(path.join(__dirname, 'public')))
 
 server.use('/', index)

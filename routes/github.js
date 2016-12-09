@@ -34,11 +34,11 @@ function getIssues(name, owner, token, cb){
  * GET github repos page.
  */
 router.get('/repos', function(req, res, next) {
-    const goog_token = accessTokenDB.getAccessToken(req.cookies.google_id)
+    const goog_token = accessTokenDB.getAccessToken(req.signedCookies.google_id)
     if(!goog_token){
         return res.redirect('/login')
     }
-    const git_token = accessTokenDB.getAccessToken(req.cookies.github_id)
+    const git_token = accessTokenDB.getAccessToken(req.signedCookies.github_id)
     if(!git_token){
         return res.redirect('/login/github')
     }
@@ -64,11 +64,11 @@ router.get('/repos', function(req, res, next) {
  * :repo is repo name
  */
 router.get('/:repo/issues', function(req, res, next) {
-    const goog_token = accessTokenDB.getAccessToken(req.cookies.google_id)
+    const goog_token = accessTokenDB.getAccessToken(req.signedCookies.google_id)
     if(!goog_token){
         return res.redirect('/login')
     }
-    const git_token = accessTokenDB.getAccessToken(req.cookies.github_id)
+    const git_token = accessTokenDB.getAccessToken(req.signedCookies.github_id)
     if(!git_token){
         return res.redirect('/login/github')
     }
@@ -88,11 +88,11 @@ router.get('/:repo/issues', function(req, res, next) {
  * POST issues to google tasks.
  */
 router.post('/tasks', function(req, res, next) {
-    const google_token = accessTokenDB.getAccessToken(req.cookies.google_id)
+    const google_token = accessTokenDB.getAccessToken(req.signedCookies.google_id)
     if(!google_token){
         return res.redirect('/login')
     }
-    const git_token = accessTokenDB.getAccessToken(req.cookies.github_id)
+    const git_token = accessTokenDB.getAccessToken(req.signedCookies.github_id)
     if(!git_token){
         return res.redirect('/login/github')
     }

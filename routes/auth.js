@@ -3,6 +3,7 @@
 const config = require('../config')
 const accessTokenDB = require('../model/AccessTokenDB')
 const OAuthHelper = require('../data/OAuthHelper')
+const GoogleAPIService = require('../data/GoogleAPIService')
 
 const express = require('express')
 const router = express.Router()
@@ -19,7 +20,12 @@ const state = 'ola_sou_cliente_servidor'    //TODO
  * GET login page
  */
 router.get('/', function(req, res, next) {
-    res.render('login');
+    const id = accessTokenDB.getAccessToken(req.cookies.google_id)
+    if (!id) {
+        res.render('login', {user: req.user})
+    }else {
+        res.redirect('/home')
+    }
 });
 
 /**
@@ -32,7 +38,7 @@ router.get('/google', function(req, res, next) {
     const query = queryString.stringify({
         redirect_uri: config.GOOGLE_REDIRECT_URI,
         client_id: config.GOOGLE_CLIENT_ID,
-        scope: "profile email https://www.googleapis.com/auth/tasks",
+        scope: "profile email https://www.googleapis.com/auth/tasks https://www.googleapis.com/auth/userinfo.profile",
         state: state,
         response_type: "code"
     });
@@ -64,7 +70,14 @@ router.get('/google/callback', function(req, res, next) {
                 httpOnly:true,
                 maxAge:token.expires_in*1000,   // expires_in (seconds) ... maxAge (miliseconds)
             })
-            res.redirect(config.API_URL+'home')
+            GoogleAPIService.retrieveProfile(token.access_token, (err, data) => {
+                if (err) {
+                    console.log(err)
+                } else {
+                    console.log(data)
+                }
+                res.redirect('/home')
+            })
         })
     } else {
         next(new Error('Access Denied'))

@@ -8,23 +8,25 @@ const accessTokenDB = require('../model/AccessTokenDB')
 /**
  * GET index page.
  */
-router.get('/', function(req, res, next) {
-  if(req.cookies.google_id){
-    res.redirect('/home')
-  } else {
-    res.redirect('/login')
-  }
+router.get('/', function (req, res, next) {
+    const id = accessTokenDB.getAccessToken(req.cookies.google_id)
+    if (!id) {
+        res.redirect('/login')
+    } else {
+        res.redirect('/home')
+    }
 })
 
 /**
  * GET home page.
  */
-router.get('/home', function(req, res, next) {
+router.get('/home', function (req, res, next) {
     const id = accessTokenDB.getAccessToken(req.cookies.google_id)
-    if(!id){
+    if (!id) {
         res.redirect('/login')
+    } else {
+        res.render('home')
     }
-    res.render('home')
 });
 
 module.exports = router

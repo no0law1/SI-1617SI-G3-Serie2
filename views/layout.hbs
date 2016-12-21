@@ -1,19 +1,39 @@
 <!DOCTYPE html>
 <html>
-    <head>
-        <meta charset="utf-8">
-        <title>{{title}}</title>
-        <link rel="stylesheet" href="https://bootswatch.com/readable/bootstrap.min.css">
-        <link rel="stylesheet" href="/stylesheets/styles.css"/>
-    </head>
-    <body>
-        <nav class="navbar navbar-light bg-faded">
+<head>
+    <meta charset="utf-8">
+    <title>Login Web App</title>
+    <link rel="stylesheet" href="https://bootswatch.com/readable/bootstrap.min.css">
+    <link rel="stylesheet" href="/stylesheets/styles.css"/>
+</head>
+<body>
+
+    <!-- Navbar -->
+    <nav class="navbar navbar-inverse navbar-fixed-top">
+        <div class="container">
+            <div class="navbar-header">
+                <a href="/" class="navbar-brand">Login Web App</a>
+            </div>
             <ul class="nav navbar-nav navbar-right">
-                <li>
-                    <a class="btn" href="/logout">Logout</a>
-                </li>
+                {{#if user}}
+                    <li>
+                        <p class="navbar-text">Hello {{user.displayName}}</p>
+                    </li>
+                    <li>
+                        <a class="btn" href="/logout">Logout</a>
+                    </li>
+                {{else}}
+                    <li>
+                        <a class="btn" href="/login">Login</a>
+                    </li>
+                {{/if}}
             </ul>
-        </nav>
+        </div>
+    </nav>
+
+    <div class="container">
+        <div class="page-header"></div> <!--navbar-fixed-top fix-->
         {{{body}}}
-    </body>
+    </div>
+</body>
 </html>

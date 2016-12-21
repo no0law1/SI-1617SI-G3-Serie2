@@ -2,6 +2,7 @@
 
 const express = require('express')
 const router = express.Router()
+const UserSessionDB = require('../model/UserSessionDB')
 
 const accessTokenDB = require('../model/AccessTokenDB')
 
@@ -25,7 +26,9 @@ router.get('/home', function (req, res, next) {
     if (!id) {
         res.redirect('/login')
     } else {
-        res.render('home')
+        res.render('home', {
+            user: UserSessionDB.getUser(req.cookies.session_id)
+        })
     }
 });
 

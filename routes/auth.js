@@ -1,6 +1,7 @@
 "use strict"
 
 const config = require('../config')
+const UserSessionDB = require('../model/UserSessionDB')
 const accessTokenDB = require('../model/AccessTokenDB')
 const OAuthHelper = require('../data/OAuthHelper')
 const GoogleAPIService = require('../data/GoogleAPIService')
@@ -65,16 +66,21 @@ router.get('/google/callback', function(req, res, next) {
             if(error){
                 return next(error)
             }
-            const id = accessTokenDB.putAccessToken(token)
-            res.cookie('google_id', id, {
-                httpOnly:true,
-                maxAge:token.expires_in*1000,   // expires_in (seconds) ... maxAge (miliseconds)
-            })
+            res.cookie('google_id',
+                accessTokenDB.putAccessToken(token),
+                {
+                    httpOnly: true,
+                    maxAge: token.expires_in * 1000,   // expires_in (seconds) ... maxAge (miliseconds)
+                })
+
             GoogleAPIService.retrieveProfile(token.access_token, (err, data) => {
                 if (err) {
                     console.log(err)
                 } else {
-                    console.log(data)
+                    res.cookie('session_id',
+                        UserSessionDB.insertUser(JSON.parse(data)),
+                        {httpOnly: true}
+                    )
                 }
                 res.redirect('/home')
             })

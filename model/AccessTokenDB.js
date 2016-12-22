@@ -2,21 +2,7 @@
 
 const tokens = {}
 
-const crypto = require('crypto')
-const key = 'demo'
-const encoding = 'base64'
-
-let counter = 0
-const N = 160
-function getRandomArbitrary(min = 0, max = N) {
-    return Math.random() * (max - min) + min;
-}
-
-function getNewID(){
-    return crypto.createHmac('sha256', key)
-        .update(String((counter++) + getRandomArbitrary()))
-        .digest(encoding)
-}
+const utils = require('./Utils')
 
 module.exports = {
 
@@ -37,7 +23,7 @@ module.exports = {
      * @return {number} id
      */
     putAccessToken: function (value) {
-        const key = getNewID()
+        const key = utils.generateUID()
         tokens[key] = value
         return key
     },

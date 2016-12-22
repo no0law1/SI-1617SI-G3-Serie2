@@ -2,6 +2,7 @@
 
 const config = require('../config')
 const accessTokenDB = require('../model/AccessTokenDB')
+const UserSessionDB = require('../model/UserSessionDB')
 const GithubAPIService = require('../data/GithubAPIService')
 const GoogleAPIService = require('../data/GoogleAPIService')
 
@@ -27,7 +28,10 @@ router.get('/repos', function(req, res, next) {
         if(err){
             return next(err)
         }
-        res.render('githubrepos', {items: repos})
+        res.render('githubrepos', {
+            user: UserSessionDB.getUser(req.cookies.session_id),
+            items: repos
+        })
     })
 })
 
@@ -51,7 +55,13 @@ router.get('/:repo/issues', function(req, res, next) {
         if(err){
             return next(err)
         }
-        res.render('githubissues', {name: name, owner: owner, issues: issues})
+
+        res.render('githubissues', {
+            user: UserSessionDB.getUser(req.cookies.session_id),
+            name: name,
+            owner: owner,
+            issues: issues
+        })
     })
 })
 

@@ -1,6 +1,7 @@
 "use strict"
 
 const config = require('../config')
+//const utils = require('../model/Utils')
 const UserSessionDB = require('../model/UserSessionDB')
 const accessTokenDB = require('../model/AccessTokenDB')
 const OAuthHelper = require('../data/OAuthHelper')
@@ -10,12 +11,6 @@ const express = require('express')
 const router = express.Router()
 
 const queryString = require('query-string')
-
-/**
- * To mitigate against cross-site request forgery
- */
-// generated hmac
-const state = 'ola_sou_cliente_servidor'    //TODO
 
 /**
  * GET login page
@@ -40,7 +35,6 @@ router.get('/google', function(req, res, next) {
         redirect_uri: config.GOOGLE_REDIRECT_URI,
         client_id: config.GOOGLE_CLIENT_ID,
         scope: "profile email https://www.googleapis.com/auth/tasks https://www.googleapis.com/auth/userinfo.profile",
-        state: state,
         response_type: "code"
     });
 
@@ -57,9 +51,9 @@ router.get('/google/callback', function(req, res, next) {
     if(req.query.error) {
         return next(new Error(req.query.error))
     }
-    if(!req.query.state || req.query.state != state){    //TODO: change this
+    /*if(!req.query.state || req.query.state != state){    //TODO: change this
         return next(new Error())
-    }
+    }*/
 
     if(req.query.code){
         OAuthHelper.getGoogleAccessToken(req.query.code, (error, resp, token) => {
@@ -100,7 +94,6 @@ router.get('/github', function (req, res, next) {
         client_id: config.GITHUB_CLIENT_ID,
         redirect_uri: config.GITHUB_REDIRECT_URI,
         scope: 'user repo',
-        state: state,
     })
 
     res.set({
@@ -116,9 +109,9 @@ router.get('/github/callback', function(req, res, next) {
     if(req.query.error){
         return next(new Error(req.query.error))
     }
-    if(!req.query.state || req.query.state != state){    //TODO: change this
+    /*if(!req.query.state || req.query.state != state){    //TODO: change this
         return next(new Error())
-    }
+    }*/
 
     OAuthHelper.getGithubAccessToken(req.query.code, (error, response, token) => {
         if(error){

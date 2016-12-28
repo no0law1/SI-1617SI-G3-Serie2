@@ -5,7 +5,7 @@ module.exports = {
     /**
      * Maps a repository DTO to an Entity model Repository, which only has what is needed
      * @param repos
-     * @return {Array} of literals  //TODO: Instanceof REPOS
+     * @return {Array} of literals
      */
     repos: function (repos) {
         const myRepos = []

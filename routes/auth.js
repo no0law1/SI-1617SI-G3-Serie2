@@ -15,14 +15,13 @@ const queryString = require('query-string')
 /**
  * GET login page
  */
-router.get('/', function(req, res, next) {
-    const id = accessTokenDB.getAccessToken(req.cookies.google_id)
-    if (!id) {
-        res.render('login', {user: req.user})
-    }else {
+router.get('/', function (req, res, next) {
+    if (!accessTokenDB.getAccessToken(req.cookies.google_id)) {
+        res.render('login')
+    } else {
         res.redirect('/home')
     }
-});
+})
 
 /**
  * GET google login page.

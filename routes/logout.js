@@ -22,7 +22,7 @@ router.get('/', function(req, res, next) {
         UserSessionDB.removeUser(req.cookies.session_id)
         res.clearCookie('session_id')
     }
-    res.redirect('back')
+    res.redirect('/')
 })
 
 module.exports = router

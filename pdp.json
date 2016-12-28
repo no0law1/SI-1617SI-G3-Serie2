@@ -1,0 +1,34 @@
+{
+  "UA": {
+    "Nuno Reis" : ["owner"],
+    "Carlos Florêncio" : ["admin"],
+    "Joao" : ["bugtracker"],
+    "Guest" : ["guest"]
+  },
+  "PA": {
+    "owner": ["kickAdmin"],
+    "admin": ["kick"],
+    "social": ["write"],
+    "debugger": ["write", "debug", "shutdown"],
+    "comentator": ["comment"],
+    "user": [
+      "/login/github",
+      "/login/github/callback",
+      "/github/repos",
+      "/github/:repo/issues",
+      "/github/tasks"
+    ],
+    "userWithNoRoles": ["/home", "/user/roles", "/logout"],
+    "guest": ["/", "/login", "/login/google", "/login/google/callback"]
+  },
+  "RH": {
+    "owner": ["admin"],
+    "admin": ["social", "debugger"],
+    "social": ["comentator"],
+    "comentator": ["user"],
+    "debug": ["user"],
+    "user": ["userWithNoRoles"],
+    "userWithNoRoles": ["guest"],
+    "guest": []
+  }
+}

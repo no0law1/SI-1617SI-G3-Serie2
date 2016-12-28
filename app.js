@@ -7,6 +7,8 @@ const logger = require('morgan')
 const cookieParser = require('cookie-parser')
 const bodyParser = require('body-parser')
 
+const pep = require('./routes/validation/pepMiddleware')
+
 const index = require('./routes/index')
 const github = require('./routes/github')
 const auth = require('./routes/auth')
@@ -25,6 +27,8 @@ server.use(bodyParser.json())
 server.use(bodyParser.urlencoded({ extended: false }))
 server.use(cookieParser())
 server.use(express.static(path.join(__dirname, 'public')))
+
+server.use(pep)
 
 server.use('/', index)
 server.use('/github', github)

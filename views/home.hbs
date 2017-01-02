@@ -9,11 +9,16 @@
 
             {{#if roles}}
                 <form action="/user/roles" method="post">
-                    {{#each roles}}
-                        <div class="checkbox-inline">
-                            <input type="checkbox" {{#if checked}}checked{{/if}} name="roles" value="{{name}}">{{name}}
-                        </div>
-                    {{/each}}
+                    <div class="form-group">
+                        {{#each roles}}
+                            <!--TODO: add rows 4 by 4-->
+                            <!--TODO: add require one checkbox to submit-->
+                            <div class="checkbox-inline">
+                                <input type="checkbox"
+                                       {{#if checked}}checked{{/if}} name="roles" value="{{name}}">{{name}}
+                            </div>
+                        {{/each}}
+                    </div>
                     <div>
                         <button class="btn btn-google">Activate Roles</button>
                     </div>

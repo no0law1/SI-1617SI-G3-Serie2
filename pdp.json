@@ -26,7 +26,7 @@
     "admin": ["social", "debugger"],
     "social": ["comentator"],
     "comentator": ["user"],
-    "debug": ["user"],
+    "debugger": ["user"],
     "user": ["userWithNoRoles"],
     "userWithNoRoles": ["guest"],
     "guest": []

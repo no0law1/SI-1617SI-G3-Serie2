@@ -4,6 +4,8 @@ const express = require('express')
 const router = express.Router()
 const UserSessionDB = require('../model/UserSessionDB')
 
+const pep = require('./validation/PolicyEnforcementPoint')
+
 const validate = require('./validation/userValidationMiddleware')
 
 /**
@@ -18,21 +20,18 @@ router.get('/', validate.googleAuthentication, function (req, res, next) {
  */
 router.get('/home', validate.googleAuthentication, function (req, res, next) {
     const user = UserSessionDB.getUser(req.cookies.session_id)
-    let roles
 
-    //TODO: see roles? pep get roles?
-    // Dummy for testing
-    roles = [{name: "admin", checked: false}, {name: "user", checked:false}]
+    const roles = pep.getRoles(user.displayName).map(role => {
+        return {checked: false, name: role}
+    })
 
-    //TODO: needs to be set on post /user/roles to pdp
     if(user.roles){
-        console.log(user.roles === Array)
         roles.forEach(role => {
-            if(user.roles.includes(role.name)){
-                role.checked = true
-            } else {
-                role.checked = false
-            }
+            user.roles.forEach(userRole => {
+                if(role.name == userRole.name){
+                    role.checked = userRole.checked
+                }
+            })
         })
     }
 
@@ -47,7 +46,21 @@ router.get('/home', validate.googleAuthentication, function (req, res, next) {
  */
 router.post('/user/roles', validate.googleAuthentication, function (req, res, next) {
     const user = UserSessionDB.getUser(req.cookies.session_id)
-    user.roles = req.body.roles
+
+    let revokeRoles = []
+    pep.getRoles(user.displayName).forEach(role => {
+        if(!req.body.roles.includes(role)){
+            revokeRoles.push(role)
+        }
+    })
+
+    pep.revokeRoles(user.displayName, revokeRoles)
+    pep.grantRoles(user.displayName, req.body.roles)
+
+    user.roles = req.body.roles.map(role => {
+        return { checked: true, name: role }
+    })
+
     res.redirect('back')
 })
 

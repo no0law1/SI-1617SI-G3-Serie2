@@ -1,6 +1,6 @@
 <script>
     function func() {
-        var checkboxes = document.getElementsByClassName("checkbox-inline")
+        const checkboxes = document.getElementsByClassName("checkbox-inline");
         for(let i = 0; i<checkboxes.length; i++){
             if(checkboxes[i].firstElementChild.checked){
                 return true
@@ -25,7 +25,6 @@
                     <div class="form-group">
                         {{#each roles}}
                             <!--TODO: add rows 4 by 4-->
-                            <!--TODO: add require one checkbox to submit-->
                             <div class="checkbox-inline">
                                 <input type="checkbox"
                                        {{#if checked}}checked{{/if}} name="roles" value="{{name}}">{{name}}

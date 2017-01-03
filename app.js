@@ -13,6 +13,7 @@ const index = require('./routes/index')
 const github = require('./routes/github')
 const auth = require('./routes/auth')
 const logout = require('./routes/logout')
+const panel = require('./routes/panel')
 
 const server = express()
 
@@ -32,6 +33,7 @@ server.use('/', index)
 server.use('/github', github)
 server.use('/login', auth)
 server.use('/logout', logout)
+server.use('/panel', panel)
 
 // catch 404 and forward to error handler
 server.use(function(req, res, next) {

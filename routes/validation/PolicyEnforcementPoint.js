@@ -4,46 +4,45 @@ const pdpFactory = require('policy-decision-point')
 const pdp = pdpFactory.initSync('./pdp.json')
 const UserAccessDB = require('../../model/UserSessionDB')
 
+
 module.exports = {
 
-    grantRoles: function (user, roles) {
-        pdp.grantRoles(user, roles)
-    },
-
-    revokeRoles: function (user, roles) {
-        pdp.revokeRoles(user, roles)
+    /**
+     * Set's the user's roles
+     *
+     * @param user user to grant and revoke the roles
+     * @param grantRoles the roles to be granted
+     * @param revokeRoles the roles to be revoked
+     */
+    setRoles: function (user, grantRoles, revokeRoles) {
+        pdp.grantRoles(user, grantRoles)
+        pdp.revokeRoles(user, revokeRoles)
     },
 
     getRoles: function (user) {
         const arr = pdp.userRoles(user)
-        arr.splice(0, 1)    //Hack to remove guest from roles (may be removed)
         return arr
     },
 
-    middleware: function (req, res, next) {
-        let pdpUser
-        let roles
-        const user = UserAccessDB.getUser(req.cookies.session_id)
-        if (!user) {
-            pdpUser = "Guest"
-            roles = [{checked:true, name:"guest"}]
-        } else {
-            pdpUser = user.displayName;
+    hasPermission: function (permission) {
+        return function (req, res, next) {
+            let roles
+            const user = UserAccessDB.getUser(req.cookies.session_id)
             if (!user.roles) {
                 user.roles = [{checked: true, name:"userWithNoRoles"}]
             }
             roles = user.roles
-        }
 
-        if(pdp.login(pdpUser, roles.map(role => { return role.name }))){
-            if (pdp.isPermitted(pdpUser, req.path)) {
-                return next()
+            if(pdp.login(user.displayName, roles.map(role => { return role.name }))){
+                if (pdp.isPermitted(user.displayName, permission)) {
+                    return next()
+                }
             }
-        }
 
-        res.redirect('/')
-        // const error = new Error("Access Denied")
-        // error.status = 403
-        // next(error)
+            res.redirect('/')
+            // const error = new Error("Access Denied")
+            // error.status = 403
+            // next(error)
+        }
     }
 }

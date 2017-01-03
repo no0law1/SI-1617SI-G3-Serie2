@@ -2,8 +2,7 @@
   "UA": {
     "Nuno Reis" : ["owner"],
     "Carlos Florêncio" : ["admin"],
-    "Joao" : ["bugtracker"],
-    "Guest" : ["guest"]
+    "Joao" : ["bugtracker"]
   },
   "PA": {
     "owner": ["kickAdmin"],
@@ -18,8 +17,7 @@
       "/github/:repo/issues",
       "/github/tasks"
     ],
-    "userWithNoRoles": ["/home", "/user/roles", "/logout"],
-    "guest": ["/", "/login", "/login/google", "/login/google/callback"]
+    "userWithNoRoles": ["/home", "/user/roles", "/logout"]
   },
   "RH": {
     "owner": ["admin"],
@@ -28,7 +26,6 @@
     "comentator": ["user"],
     "debugger": ["user"],
     "user": ["userWithNoRoles"],
-    "userWithNoRoles": ["guest"],
-    "guest": []
+    "userWithNoRoles": []
   }
 }

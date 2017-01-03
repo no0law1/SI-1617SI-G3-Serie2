@@ -28,8 +28,6 @@ server.use(bodyParser.urlencoded({ extended: false }))
 server.use(cookieParser())
 server.use(express.static(path.join(__dirname, 'public')))
 
-server.use(pep.middleware)
-
 server.use('/', index)
 server.use('/github', github)
 server.use('/login', auth)

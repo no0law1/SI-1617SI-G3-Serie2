@@ -1,3 +1,16 @@
+<script>
+    function func() {
+        var checkboxes = document.getElementsByClassName("checkbox-inline")
+        for(let i = 0; i<checkboxes.length; i++){
+            if(checkboxes[i].firstElementChild.checked){
+                return true
+            }
+        }
+        alert("At least one checkbox must be checked")
+        return false
+    }
+</script>
+
 <div class="container">
     <div align="center">
         <h1>Welcome {{user.displayName}}</h1>
@@ -8,7 +21,7 @@
             <h1>Assign a role</h1>
 
             {{#if roles}}
-                <form action="/user/roles" method="post">
+                <form action="/user/roles" method="post" onsubmit="return func()">
                     <div class="form-group">
                         {{#each roles}}
                             <!--TODO: add rows 4 by 4-->

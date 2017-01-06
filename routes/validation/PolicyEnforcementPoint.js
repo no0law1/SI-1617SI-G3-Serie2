@@ -11,17 +11,15 @@ module.exports = {
      * Set's the user's roles
      *
      * @param user user to grant and revoke the roles
-     * @param grantRoles the roles to be granted
-     * @param revokeRoles the roles to be revoked
+     * @param roles the roles to be granted
+     * @return returns granted roles
      */
-    setRoles: function (user, grantRoles, revokeRoles) {
-        pdp.grantRoles(user, grantRoles)
-        pdp.revokeRoles(user, revokeRoles)
+    setRoles: function (user, roles) {
+        return pdp.setRoles(user, roles)
     },
 
     getRoles: function (user) {
-        const arr = pdp.userRoles(user)
-        return arr
+        return pdp.userRoles(user)
     },
 
     hasPermission: function (permission) {
@@ -33,16 +31,13 @@ module.exports = {
             }
             roles = user.roles
 
-            if(pdp.login(user.displayName, roles.map(role => { return role.name }))){
+            if(pdp.login(user.displayName, roles.map(role => role.name))){
                 if (pdp.isPermitted(user.displayName, permission)) {
                     return next()
                 }
             }
 
             res.redirect('/')
-            // const error = new Error("Access Denied")
-            // error.status = 403
-            // next(error)
         }
     }
 }

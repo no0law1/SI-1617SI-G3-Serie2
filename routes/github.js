@@ -19,6 +19,7 @@ const request = require('request')
 router.get('/repos',
     validate.googleAuthentication,
     validate.githubAuthentication,
+    validate.userRetrieval,
     pep.hasPermission('/github/repos'),
     function (req, res, next) {
         GithubAPIService.retrieveRepos(req.github_token.access_token, (err, repos) => {
@@ -26,7 +27,6 @@ router.get('/repos',
                 return next(err)
             }
             res.render('githubrepos', {
-                user: UserSessionDB.getUser(req.cookies.session_id),
                 items: repos
             })
         })
@@ -40,6 +40,7 @@ router.get('/repos',
 router.get('/:repo/issues',
     validate.googleAuthentication,
     validate.githubAuthentication,
+    validate.userRetrieval,
     pep.hasPermission('/github/:repo/issues'),
     function (req, res, next) {
         const name = req.params.repo
@@ -50,7 +51,6 @@ router.get('/:repo/issues',
             }
 
             res.render('githubissues', {
-                user: UserSessionDB.getUser(req.cookies.session_id),
                 name: name,
                 owner: owner,
                 issues: issues
@@ -65,6 +65,7 @@ router.get('/:repo/issues',
 router.post('/tasks',
     validate.googleAuthentication,
     validate.githubAuthentication,
+    validate.userRetrieval,
     pep.hasPermission('/github/tasks'),
     function (req, res, next) {
         GoogleAPIService.postTaskList(req.google_token.access_token,

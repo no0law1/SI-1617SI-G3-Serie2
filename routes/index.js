@@ -23,9 +23,10 @@ router.get('/',
  */
 router.get('/home',
     validate.googleAuthentication,
+    validate.userRetrieval,
     pep.hasPermission('/home'),
     function (req, res, next) {
-        const user = UserSessionDB.getUser(req.cookies.session_id)
+        const user = res.locals.user
 
         const roles = pep.getRoles(user.displayName).map(role => {
             return {checked: false, name: role}
@@ -42,7 +43,6 @@ router.get('/home',
         }
 
         res.render('home', {
-            user: user,
             roles: roles
         })
     }
@@ -53,6 +53,7 @@ router.get('/home',
  */
 router.post('/user/roles',
     validate.googleAuthentication,
+    validate.userRetrieval,
     pep.hasPermission('/user/roles'),
     function (req, res, next) {
         if (!req.body.roles) {
@@ -62,18 +63,11 @@ router.post('/user/roles',
             req.body.roles = [req.body.roles]
         }
 
-        const user = UserSessionDB.getUser(req.cookies.session_id)
+        const user = res.locals.user
 
-        let revokeRoles = []
-        pep.getRoles(user.displayName).forEach(role => {
-            if (!req.body.roles.includes(role)) {
-                revokeRoles.push(role)
-            }
-        })
+        const grantedRoles = pep.setRoles(user.displayName, req.body.roles)
 
-        pep.setRoles(user.displayName, req.body.roles, revokeRoles)
-
-        user.roles = req.body.roles.map(role => {
+        user.roles = grantedRoles.map(role => {
             return {checked: true, name: role}
         })
 

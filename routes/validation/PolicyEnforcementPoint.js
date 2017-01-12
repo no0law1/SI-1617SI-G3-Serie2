@@ -37,7 +37,8 @@ module.exports = {
                 }
             }
 
-            res.redirect('/')
+            user.message = {type:'info', message:'You are not permitted. Check your roles'}
+            res.redirect('back')
         }
     }
 }

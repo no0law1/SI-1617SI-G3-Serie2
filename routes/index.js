@@ -6,7 +6,7 @@ const UserSessionDB = require('../model/UserSessionDB')
 
 const pep = require('./validation/PolicyEnforcementPoint')
 
-const validate = require('./validation/userValidationMiddleware')
+const validate = require('./validation/Validations')
 
 /**
  * GET index page.
@@ -23,7 +23,6 @@ router.get('/',
  */
 router.get('/home',
     validate.googleAuthentication,
-    validate.userRetrieval,
     pep.hasPermission('/home'),
     function (req, res, next) {
         const user = res.locals.user
@@ -53,7 +52,6 @@ router.get('/home',
  */
 router.post('/user/roles',
     validate.googleAuthentication,
-    validate.userRetrieval,
     pep.hasPermission('/user/roles'),
     function (req, res, next) {
         if (!req.body.roles) {
@@ -71,6 +69,7 @@ router.post('/user/roles',
             return {checked: true, name: role}
         })
 
+        user.message = {type: 'info', message: 'Roles successfully granted'}
         res.redirect('back')
     }
 )

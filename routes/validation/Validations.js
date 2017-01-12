@@ -10,6 +10,19 @@ module.exports = {
             return res.redirect('/login')
         }
 
+        const user = UserSessionDB.getUser(req.cookies.session_id)
+        if(!user){
+            const error = new Error('No user')
+            error.status = 500
+            next(error)
+        }
+
+        if(user.message){
+            res.locals.message = user.message
+            delete user.message
+        }
+
+        res.locals.user = user
         req.google_token = google_token
         next()
     },
@@ -21,17 +34,6 @@ module.exports = {
         }
 
         req.github_token = github_token
-        next()
-    },
-
-    userRetrieval: function (req, res, next) {
-        const user = UserSessionDB.getUser(req.cookies.session_id)
-        if(!user){
-            const error = new Error('No user')
-            error.status = 500
-            next(error)
-        }
-        res.locals.user = user
         next()
     }
 }

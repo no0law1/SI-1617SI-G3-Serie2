@@ -5,7 +5,7 @@ const UserSessionDB = require('../model/UserSessionDB')
 const GithubAPIService = require('../data/GithubAPIService')
 const GoogleAPIService = require('../data/GoogleAPIService')
 
-const validate = require('./validation/userValidationMiddleware')
+const validate = require('./validation/Validations')
 const pep = require('./validation/PolicyEnforcementPoint')
 
 const express = require('express')
@@ -19,7 +19,6 @@ const request = require('request')
 router.get('/repos',
     validate.googleAuthentication,
     validate.githubAuthentication,
-    validate.userRetrieval,
     pep.hasPermission('/github/repos'),
     function (req, res, next) {
         GithubAPIService.retrieveRepos(req.github_token.access_token, (err, repos) => {
@@ -40,7 +39,6 @@ router.get('/repos',
 router.get('/:repo/issues',
     validate.googleAuthentication,
     validate.githubAuthentication,
-    validate.userRetrieval,
     pep.hasPermission('/github/:repo/issues'),
     function (req, res, next) {
         const name = req.params.repo
@@ -65,7 +63,6 @@ router.get('/:repo/issues',
 router.post('/tasks',
     validate.googleAuthentication,
     validate.githubAuthentication,
-    validate.userRetrieval,
     pep.hasPermission('/github/tasks'),
     function (req, res, next) {
         GoogleAPIService.postTaskList(req.google_token.access_token,

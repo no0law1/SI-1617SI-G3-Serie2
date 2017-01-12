@@ -6,14 +6,13 @@ const UserSessionDB = require('../model/UserSessionDB')
 
 const pep = require('./validation/PolicyEnforcementPoint')
 
-const validate = require('./validation/userValidationMiddleware')
+const validate = require('./validation/Validations')
 
 /**
  * GET panel page.
  */
 router.get('/',
     validate.googleAuthentication,
-    validate.userRetrieval,
     pep.hasPermission('/panel'),
     function (req, res, next) {
         res.render('panel', {permission: '/panel'})
@@ -25,7 +24,6 @@ router.get('/',
  */
 router.get('/reboot',
     validate.googleAuthentication,
-    validate.userRetrieval,
     pep.hasPermission('/panel/reboot'),
     function (req, res, next) {
         res.render('panel', {permission: '/panel/reboot'})
@@ -37,7 +35,6 @@ router.get('/reboot',
  */
 router.get('/actions',
     validate.googleAuthentication,
-    validate.userRetrieval,
     pep.hasPermission('/panel/actions'),
     function (req, res, next) {
         res.render('panel', {permission: '/panel/actions'})

@@ -7,8 +7,6 @@ const logger = require('morgan')
 const cookieParser = require('cookie-parser')
 const bodyParser = require('body-parser')
 
-const pep = require('./routes/validation/PolicyEnforcementPoint')
-
 const index = require('./routes/index')
 const github = require('./routes/github')
 const auth = require('./routes/auth')
@@ -18,10 +16,11 @@ const panel = require('./routes/panel')
 const server = express()
 
 // view engine setup
+const hbs = require('hbs')
+hbs.registerPartials(__dirname + '/views/partials')
 server.set('views', path.join(__dirname, 'views'))
 server.set('view engine', 'hbs')
 
-// uncomment after placing your favicon in /public
 server.use(favicon(path.join(__dirname, 'public', 'favicon.ico')))
 server.use(logger('dev'))
 server.use(bodyParser.json())
@@ -50,7 +49,7 @@ server.use(function(err, req, res, next) {
 
   // render the error page
   res.status(err.status || 500)
-  res.render('error')
+    res.render('error')
 })
 
 module.exports = server

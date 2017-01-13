@@ -51,7 +51,8 @@ router.get('/:repo/issues',
             res.render('githubissues', {
                 name: name,
                 owner: owner,
-                issues: issues
+                issues: issues,
+                csrfToken: req.csrfToken()
             })
         })
     }
@@ -88,7 +89,9 @@ router.post('/tasks',
                                     return next(err)
                                 }
                                 console.log(data)
-                                res.end('success')
+                                const user = UserSessionDB.getUser(req.cookies.session_id)
+                                user.message = {type: 'info', message: 'Tasks successfully added'}
+                                res.redirect('back')
                             })
                     })
                 })

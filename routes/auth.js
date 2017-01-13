@@ -5,6 +5,7 @@ const UserSessionDB = require('../model/UserSessionDB')
 const accessTokenDB = require('../model/AccessTokenDB')
 const OAuthHelper = require('../data/OAuthHelper')
 const GoogleAPIService = require('../data/GoogleAPIService')
+const csrf = require('csurf')
 
 const pep = require('./validation/PolicyEnforcementPoint')
 
@@ -38,8 +39,11 @@ router.get('/google',
             redirect_uri: config.GOOGLE_REDIRECT_URI,
             client_id: config.GOOGLE_CLIENT_ID,
             scope: "profile email https://www.googleapis.com/auth/tasks https://www.googleapis.com/auth/userinfo.profile",
-            response_type: "code"
+            response_type: "code",
+            state: req.csrfToken()
         });
+
+        console.log(req.csrfToken())
 
         res.set({
             "Location": config.GOOGLE_OAUTH2_URL + '?' + query
@@ -56,37 +60,34 @@ router.get('/google/callback',
         if (req.query.error) {
             return next(new Error(req.query.error))
         }
-        /*if(!req.query.state || req.query.state != state){    //TODO: change this
-         return next(new Error())
-         }*/
 
-        if (req.query.code) {
-            OAuthHelper.getGoogleAccessToken(req.query.code, (error, resp, token) => {
-                if (error) {
-                    return next(error)
-                }
-                res.cookie('google_id',
-                    accessTokenDB.putAccessToken(token),
-                    {
-                        httpOnly: true,
-                        maxAge: token.expires_in * 1000,   // expires_in (seconds) ... maxAge (miliseconds)
-                    })
-
-                GoogleAPIService.retrieveProfile(token.access_token, (err, data) => {
-                    if (err) {
-                        console.log(err)
-                    } else {
-                        res.cookie('session_id',
-                            UserSessionDB.insertUser(JSON.parse(data)),
-                            {httpOnly: true}
-                        )
-                    }
-                    res.redirect('/home')
-                })
-            })
-        } else {
-            next(new Error('Access Denied'))
+        if (!req.query.code) {
+            return next(new Error('Access Denied'))
         }
+
+        OAuthHelper.getGoogleAccessToken(req.query.code, (error, resp, token) => {
+            if (error) {
+                return next(error)
+            }
+            res.cookie('google_id',
+                accessTokenDB.putAccessToken(token),
+                {
+                    httpOnly: true,
+                    maxAge: token.expires_in * 1000,   // expires_in (seconds) ... maxAge (miliseconds)
+                })
+
+            GoogleAPIService.retrieveProfile(token.access_token, (err, data) => {
+                if (err) {
+                    console.log(err)
+                } else {
+                    res.cookie('session_id',
+                        UserSessionDB.insertUser(JSON.parse(data)),
+                        {httpOnly: true}
+                    )
+                }
+                res.redirect('/home')
+            })
+        })
     }
 )
 
@@ -102,6 +103,7 @@ router.get('/github',
             client_id: config.GITHUB_CLIENT_ID,
             redirect_uri: config.GITHUB_REDIRECT_URI,
             scope: 'user repo',
+            state: req.csrfToken()
         })
 
         res.set({
@@ -120,9 +122,6 @@ router.get('/github/callback',
         if (req.query.error) {
             return next(new Error(req.query.error))
         }
-        /*if(!req.query.state || req.query.state != state){    //TODO: change this
-         return next(new Error())
-         }*/
 
         OAuthHelper.getGithubAccessToken(req.query.code, (error, response, token) => {
             if (error) {

@@ -1,7 +1,8 @@
 {
   "UA": {
-    "Nuno Reis" : ["owner"],
-    "Carlos Florêncio" : ["admin"]
+    "nolawreis@gmail.com" : ["owner"],
+    "carlosmflorencio@gmail.com" : ["admin"],
+    "carlos.agc.pereira@gmail.com" : ["debugger"]
   },
   "PA": {
     "owner": ["/panel:user/delete"],
@@ -27,3 +28,4 @@
     "userWithNoRoles": []
   }
 }
+

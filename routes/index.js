@@ -27,7 +27,7 @@ router.get('/home',
     function (req, res, next) {
         const user = res.locals.user
 
-        const roles = pep.getRoles(user.displayName).map(role => {
+        const roles = pep.getRoles(user.emails[0].value).map(role => {
             return {checked: false, name: role}
         })
 
@@ -48,7 +48,7 @@ router.get('/home',
 )
 
 /**
- * GET home page.
+ * POST roles a user wants/needs.
  */
 router.post('/user/roles',
     validate.googleAuthentication,
@@ -63,7 +63,7 @@ router.post('/user/roles',
 
         const user = res.locals.user
 
-        const grantedRoles = pep.setRoles(user.displayName, req.body.roles)
+        const grantedRoles = pep.setRoles(user.emails[0].value, req.body.roles)
 
         user.roles = grantedRoles.map(role => {
             return {checked: true, name: role}

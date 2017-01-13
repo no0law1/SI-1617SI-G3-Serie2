@@ -31,8 +31,8 @@ module.exports = {
             }
             roles = user.roles
 
-            if(pdp.login(user.displayName, roles.map(role => role.name))){
-                if (pdp.isPermitted(user.displayName, permission)) {
+            if(pdp.login(user.emails[0].value, roles.map(role => role.name))){
+                if (pdp.isPermitted(user.emails[0].value, permission)) {
                     return next()
                 }
             }

@@ -17,3 +17,13 @@
 .gtext {
     float: right;
 }
+
+.btn-as-anchor{
+    background-color: transparent;
+    border: 1px solid transparent;
+    border-radius: 4px;
+}
+
+.btn-as-anchor:hover{
+    border: 1px solid #ddd;
+}

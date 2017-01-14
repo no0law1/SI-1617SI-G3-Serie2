@@ -9,9 +9,9 @@ const accessTokenDB = require('../model/AccessTokenDB')
 const UserSessionDB = require('../model/UserSessionDB')
 
 /**
- * GET index page.
+ * POST logout user.
  */
-router.get('/',
+router.post('/',
     pep.hasPermission('/logout'),
     function (req, res, next) {
         if (req.cookies.google_id) {

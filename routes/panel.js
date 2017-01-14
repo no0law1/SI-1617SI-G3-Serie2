@@ -15,7 +15,7 @@ router.get('/',
     validate.googleAuthentication,
     pep.hasPermission('/panel'),
     function (req, res, next) {
-        res.render('panel', {permission: '/panel'})
+        res.render('panel', {permission: '/panel', _csrf: req.csrfToken()})
     }
 )
 
@@ -26,7 +26,7 @@ router.get('/reboot',
     validate.googleAuthentication,
     pep.hasPermission('/panel/reboot'),
     function (req, res, next) {
-        res.render('panel', {permission: '/panel/reboot'})
+        res.render('panel', {permission: '/panel/reboot', _csrf: req.csrfToken()})
     }
 )
 
@@ -37,7 +37,7 @@ router.get('/actions',
     validate.googleAuthentication,
     pep.hasPermission('/panel/actions'),
     function (req, res, next) {
-        res.render('panel', {permission: '/panel/actions'})
+        res.render('panel', {permission: '/panel/actions', _csrf: req.csrfToken()})
     }
 )
 

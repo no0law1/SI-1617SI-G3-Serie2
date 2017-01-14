@@ -43,8 +43,6 @@ router.get('/google',
             state: req.csrfToken()
         });
 
-        console.log(req.csrfToken())
-
         res.set({
             "Location": config.GOOGLE_OAUTH2_URL + '?' + query
         })

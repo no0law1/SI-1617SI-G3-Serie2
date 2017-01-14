@@ -26,7 +26,8 @@ router.get('/repos',
                 return next(err)
             }
             res.render('githubrepos', {
-                items: repos
+                items: repos,
+                _csrf: req.csrfToken()
             })
         })
     }

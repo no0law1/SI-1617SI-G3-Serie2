@@ -26,8 +26,7 @@ router.get('/repos',
                 return next(err)
             }
             res.render('githubrepos', {
-                items: repos,
-                _csrf: req.csrfToken()
+                items: repos
             })
         })
     }
@@ -52,8 +51,7 @@ router.get('/:repo/issues',
             res.render('githubissues', {
                 name: name,
                 owner: owner,
-                issues: issues,
-                csrfToken: req.csrfToken()
+                issues: issues
             })
         })
     }

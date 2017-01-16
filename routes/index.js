@@ -42,8 +42,7 @@ router.get('/home',
         }
 
         res.render('home', {
-            roles: roles,
-            csrfToken: req.csrfToken()
+            roles: roles
         })
     }
 )

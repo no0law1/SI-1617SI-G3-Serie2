@@ -44,7 +44,8 @@ router.get('/google',
         });
 
         res.set({
-            "Location": config.GOOGLE_OAUTH2_URL + '?' + query
+            "Location": config.GOOGLE_OAUTH2_URL + '?' + query,
+            "set-cookie": "state=" + req.csrfToken()
         })
         res.end()
     }
@@ -54,6 +55,7 @@ router.get('/google',
  * GET google callback authentication page.
  */
 router.get('/google/callback',
+    checkState,
     function (req, res, next) {
         if (req.query.error) {
             return next(new Error(req.query.error))
@@ -105,7 +107,8 @@ router.get('/github',
         })
 
         res.set({
-            "Location": config.GITHUB_OAUTH2_URL + '?' + params
+            "Location": config.GITHUB_OAUTH2_URL + '?' + params,
+            "set-cookie": "state=" + req.csrfToken()
         })
         res.end()
     }
@@ -115,10 +118,14 @@ router.get('/github',
  * GET github callback authentication page.
  */
 router.get('/github/callback',
+    checkState,
     pep.hasPermission('/login/github/callback'),
     function (req, res, next) {
         if (req.query.error) {
             return next(new Error(req.query.error))
+        }
+        if(res.cookies.state !== res.query.state){
+            return next(new Error('You tried, but failed'))
         }
 
         OAuthHelper.getGithubAccessToken(req.query.code, (error, response, token) => {
@@ -134,5 +141,24 @@ router.get('/github/callback',
         })
     }
 )
+
+/**
+ * Auxiliary function to check the state on authentication.
+ * The csurf package ignores GET methods, because they are not supposed to change the state of the database.
+ * We need csurf package anyway due to the req.csrfToken()
+ *
+ * @param req
+ * @param res
+ * @param next
+ * @return {*}
+ */
+function checkState(req, res, next) {
+    if(req.cookies.state !== req.query.state){
+        delete req.cookies.state
+        return next(new Error('You tried, but failed'))
+    }
+    delete req.cookies.state
+    next()
+}
 
 module.exports = router

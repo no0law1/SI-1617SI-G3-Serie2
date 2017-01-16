@@ -124,9 +124,6 @@ router.get('/github/callback',
         if (req.query.error) {
             return next(new Error(req.query.error))
         }
-        if(res.cookies.state !== res.query.state){
-            return next(new Error('You tried, but failed'))
-        }
 
         OAuthHelper.getGithubAccessToken(req.query.code, (error, response, token) => {
             if (error) {

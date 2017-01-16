@@ -37,5 +37,20 @@ module.exports = {
             myIssues.push(myIssue)
         })
         return myIssues
+    },
+
+    /**
+     *  Maps an user DTO to an Entity model User, which has only what is necessary
+     *
+     * @param user
+     * @return {{name: String, email: String, gender: String, image: {url: String}}}
+     */
+    user: function (user) {
+        return {
+            name: user.displayName,
+            email: user.emails[0].value,
+            gender: user.gender,
+            image: user.image,
+        }
     }
 }

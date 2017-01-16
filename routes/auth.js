@@ -5,7 +5,7 @@ const UserSessionDB = require('../model/UserSessionDB')
 const accessTokenDB = require('../model/AccessTokenDB')
 const OAuthHelper = require('../data/OAuthHelper')
 const GoogleAPIService = require('../data/GoogleAPIService')
-const csrf = require('csurf')
+const mapper = require('../model/DTOMapper')
 
 const pep = require('./validation/PolicyEnforcementPoint')
 
@@ -79,7 +79,7 @@ router.get('/google/callback',
                     console.log(err)
                 } else {
                     res.cookie('session_id',
-                        UserSessionDB.insertUser(JSON.parse(data)),
+                        UserSessionDB.insertUser(mapper.user(JSON.parse(data))),
                         {httpOnly: true}
                     )
                 }

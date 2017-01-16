@@ -27,7 +27,7 @@ router.get('/home',
     function (req, res, next) {
         const user = res.locals.user
 
-        const roles = pep.getRoles(user.emails[0].value).map(role => {
+        const roles = pep.getRoles(user.email).map(role => {
             return {checked: false, name: role}
         })
 
@@ -64,7 +64,7 @@ router.post('/user/roles',
 
         const user = res.locals.user
 
-        const grantedRoles = pep.setRoles(user.emails[0].value, req.body.roles)
+        const grantedRoles = pep.setRoles(user.email, req.body.roles)
 
         user.roles = grantedRoles.map(role => {
             return {checked: true, name: role}
